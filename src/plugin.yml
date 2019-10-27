@@ -1,0 +1,14 @@
+name: ThirdEye
+main: com.te.mainListener
+autor: FEST_Channel
+version: 0.0.2
+commands:
+         te:
+         ping:
+         hat:
+         top:
+         fix:
+         look:
+         deldat:
+         torch:
+api-version: 1.13
