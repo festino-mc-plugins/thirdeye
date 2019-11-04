@@ -1,5 +1,6 @@
-package com.te;
+package com.te.top;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 
@@ -48,22 +49,22 @@ public class RatingTop {
 		/*if(this instanceof VanillaRatingTop && ((VanillaRatingTop)this).criteria == Statistic.PLAY_ONE_MINUTE)
 			value = (int) (Math.round((double)value/720)/100);  //div ticks by 20*60*60*/
 			//value = (int) (Math.round((double)value*10/6)/100); //div minutes by 60
-		if(this instanceof VanillaRatingTop && value == 0)
+		if (this instanceof VanillaRatingTop && value == 0)
 			return;
-		for(int i=0; i < TOP_SIZE;i++) {
+		for (int i = 0; i < TOP_SIZE; i++) {
 			RatingPlace rp = places[i];
-			if(rp == null) {
+			if (rp == null) {
 				places[i] = new RatingPlace(value, nick);
 				break;
 			}
-			else if(rp.place_value < value) {
-				for(int j = TOP_SIZE-1; j > i; j--) {
+			else if (rp.place_value < value) {
+				for (int j = TOP_SIZE - 1; j > i; j--) {
 					places[j] = places[j-1];
 				}
 				places[i] = new RatingPlace(value, nick);
 				break;
 			}
-			else if(rp.place_value == value) {
+			else if (rp.place_value == value) {
 				rp.nicknames.add(nick);
 				break;
 			}
@@ -71,51 +72,60 @@ public class RatingTop {
 	}
 	
 	public void output_to_player(CommandSender sender, int num) {
-		if(places.length == 0 || places[0] == null) return; //empty list
+		if (places.length == 0 || places[0] == null) return; //empty list
 		
-		sender.sendMessage(header);
+		sender.sendMessage(ChatColor.BOLD + header);
 		
 		boolean small_values = false, is_top_time = this instanceof VanillaRatingTop && ((VanillaRatingTop)this).criteria == Statistic.PLAY_ONE_MINUTE;
-		if(is_top_time && places[0].place_value < 20*60*60*10)
+		if (is_top_time && places[0].place_value < 20*60*60*10) // 1st place - less than 10 hours
 			small_values = true;
 		
-		for(int i = 0; i<Math.min(TOP_SIZE, num); i++) {
-			if(places[i] != null) {
+		for (int i = 0; i < Math.min(TOP_SIZE, num); i++) {
+			if (places[i] != null) {
 				String names = "";
 				int length = places[i].nicknames.size();
-				for(int j = 0; j < length-1; j++) {
+				for (int j = 0; j < length-1; j++) {
 					String name = places[i].nicknames.get(j);
-					if(j > 0) {
+					if (j > 0) {
 						names += ", ";
 					}
 					names += name;
 				}
-				if(length > 1) {
+				if (length > 1) {
 					names += last_nichnames_separator;
 				}
 				names += places[i].nicknames.get(length-1);
 				
 				int int_val = places[i].place_value;
 				String value = Integer.toString(int_val);
-				if(is_top_time) {
-					value = Integer.toString((int) (Math.round(((double)int_val)/720)/100) );  //div ticks by 20*60*60
+				if (is_top_time) {
+					value = Integer.toString( (int) (Math.round(((double)int_val)/720)/100) );  //div ticks by 20*60*60
 				}
 				String end;
-				if(small_values) {
-					if(is_top_time)
-						value = Double.toString((double)Math.round(((double)int_val)/720)/100);  //div ticks by 20*60*60
+				if (small_values) {
+					if (is_top_time) {
+						value = Double.toString( (double) Math.round(((double)int_val)/720)/100 );  //div ticks by 20*60*60
+					}
 					end = ends_with5_0;
 				}
 				else {
-					end = ( (int_val+9)%10 > 3 || (int_val > 10 && int_val < 20) ) ? ends_with5_0 : (int_val%10 > 1 ? ends_with2_4 : ends_with1);
+					if ( (int_val + 9) % 10 > 3 || (int_val > 10 && int_val < 20) ) {
+						end = ends_with5_0;
+					} else if (int_val % 10 > 1) {
+						end = ends_with2_4;
+					} else {
+						end = ends_with1;
+					}
 				}
 				//[1] [place takes player] [FEST_Channel] [who had played] [10] [hours on server]
-				if(places[i].nicknames.size() == 1)
+				if (places[i].nicknames.size() == 1) {
 					sender.sendMessage((i+1) + starts_with1 + names + middle1 + value + end);
-				else
+				} else {
 					sender.sendMessage((i+1) + starts_with2p + names + middle2p + value + end);
+				}
+			} else {
+				break;
 			}
-			else break;
 		}
 	}
 }

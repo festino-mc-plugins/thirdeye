@@ -49,6 +49,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import com.te.OfflinePlayerLoader;
+import com.te.top.TopManager;
 
 
 
@@ -58,54 +59,33 @@ public class mainListener extends JavaPlugin implements Listener
 	String HAT_CANT_UNWEAR_BINDING = ChatColor.RED + "You can't unwear binded helmet.";
 	String HAT_OK = ChatColor.GREEN + "Successfully have put a hat on the head.";
 	
-	int TopSize = 5;
-	int top_update_maxticks = 216000, top_update_ticks = 0; //20*60*60*3 (3 hours)
-	
 	int ping_update_ticks = 20, ping_ticks = ping_update_ticks;
 	int sleep_update_ticks = 10, sleep_ticks = sleep_update_ticks;
 	private Scoreboard sb;
 	List<Camera> looking_players = new ArrayList<>();
 	
-	List<RatingTop> tops = new ArrayList<>();
-	
 	TorchPlacer torches = new TorchPlacer(this);
+	TopManager tops;
 	
 	public void onEnable()
 	{
 		PluginManager pm = getServer().getPluginManager();
     	pm.registerEvents(torches, this);
+
+
+		tops = new TopManager(this);
+		getCommand("top").setExecutor(tops);
+		getCommand("top").setTabCompleter(tops.getCompleter());
 		
 		sb = Bukkit.getScoreboardManager().getMainScoreboard();
 		getServer().getPluginManager().registerEvents(this, this);
-		loadConfig();
 		
-		tops.add(new VanillaRatingTop(Statistic.PLAY_ONE_MINUTE, "time", "Топ по времени:",
-				" место занимает игрок ", " место занимают игроки ",
-				", у которого ", ", у которых ",
-				" час на сервере.", " часа на сервере.", " часов на сервере."));
-		tops.add(new VanillaRatingTop(Statistic.MOB_KILLS, "killmob", "Топ по убийствам мобов:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" убийство.", " убийства.", " убийств."));
-		tops.add(new VanillaRatingTop(Statistic.PLAYER_KILLS, "kill", "Топ по убийствам игроков:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" убийство.", " убийства.", " убийств."));
-		tops.add(new VanillaRatingTop(Statistic.DEATHS, "death", "Топ по смертям:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" смерть.", " смерти.", " смертей."));
+		loadConfig();
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this,
 	            new Runnable() {
 			public void run() {
-				//⚫⚪
-				
-				top_update_ticks--;
-				if(top_update_ticks <= 0) {
-					top_update_ticks = top_update_maxticks;
-					update_tops();
-				}
+				tops.tick();
 				
 				ping_ticks--;
 				if(ping_ticks <= 0) {
@@ -177,7 +157,11 @@ public class mainListener extends JavaPlugin implements Listener
 		getConfig().addDefault("topSize", 5);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		TopSize = getConfig().getInt("topSize");
+		int top_size = getConfig().getInt("topSize", 5);
+		if (top_size <= 0) {
+			top_size = 5;
+		}
+		tops.setSize(top_size);
 		
 		System.out.println("[ThirdEye] Config Reloaded.");
 	}
@@ -207,7 +191,7 @@ public class mainListener extends JavaPlugin implements Listener
 				{
 					reloadConfig();
 					loadConfig();
-					update_tops();
+					tops.update_tops();
 					sender.sendMessage("Config and tops were reloaded.");
 					return true;
 				}
@@ -234,7 +218,7 @@ public class mainListener extends JavaPlugin implements Listener
 					sender.sendMessage(ChatColor.RED + "Игрок не найден.");
 					return false;
 				}
-				if (args[0].equalsIgnoreCase("pi"))
+				if (args[0].equalsIgnoreCase("pi")) // offline only
 				{
 					Player pl = null;
 					for(Player p : getServer().getOnlinePlayers())
@@ -244,25 +228,6 @@ public class mainListener extends JavaPlugin implements Listener
 							pl = p.getPlayer();
 						}
 					}
-					/*new Thread(new Runnable() {
-					    public void run() {
-					     	try {
-								for(OfflinePlayer p : getServer().getOfflinePlayers())
-								{
-									if(args[1].equalsIgnoreCase(p.getName()))
-									{
-										Player pl = p.getPlayer();
-										pl.loadData();
-										sender.sendMessage(ChatColor.GREEN + "Player Info about " + args[1] + ":");
-										sender.sendMessage(ChatColor.GREEN + "  World: "+pl.getWorld().getName()
-												+", X:"+pl.getPlayer().getLocation().getX()+", Y:"+pl.getPlayer().getLocation().getY()+", Z:"+pl.getPlayer().getLocation().getZ());
-									}
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-					    }
-					}).start();*/
 					if(pl == null)
 						for(OfflinePlayer p : getServer().getOfflinePlayers())
 						{
@@ -366,33 +331,6 @@ public class mainListener extends JavaPlugin implements Listener
 		}
 		if(cmd.getName().equalsIgnoreCase("top"))
 		{
-			if(args.length == 0 || args.length > 0 && args[0].startsWith("?"))
-			{
-				//((EntityPlayer)((CraftPlayer)sender).getHandle()).fauxSleeping = true
-				printTops(sender);
-			}
-			else if(args.length == 1)
-			{
-				for(RatingTop rt : tops)
-					if(args[0].contains(rt.main_activator)) {
-						rt.output_to_player(sender, TopSize);
-						return true;
-					}
-				sender.sendMessage("Топа с таким определителем не существует.");
-				printTops(sender);
-				return true;
-			}
-			else if(args.length == 2)
-			{
-				for(RatingTop rt : tops)
-					if(args[0].contains(rt.main_activator) && args[1].contains(rt.add_activator)) {
-						rt.output_to_player(sender, TopSize);
-						return true;
-					}
-				sender.sendMessage("Топа с таким определителем не существует.");
-				printTops(sender);
-				return true;
-			}
 		}
 		//ellipse <x> <y> <z> <a> <b> <c> <r>
 
@@ -583,18 +521,6 @@ public class mainListener extends JavaPlugin implements Listener
 		return false;
 	}
 	
-	public void printTops(CommandSender sender) {
-		sender.sendMessage(ChatColor.GRAY+"Доступные топы:");
-		String list = "";
-		boolean first = true;
-		for(RatingTop rt : tops) {
-			if(first) first = false;
-			else list += ", ";
-			list += rt.main_activator;
-		}
-		sender.sendMessage(ChatColor.GRAY+list);
-	}
-	
 	public void changePing()
 	{
 		if(	sb.getObjective("current_ping") == null ) 
@@ -624,50 +550,6 @@ public class mainListener extends JavaPlugin implements Listener
 	
 	public int getPing(Player p) {
 		return ((EntityPlayer)((CraftPlayer)p).getHandle()).ping;
-	}
-	
-	public void update_tops() {
-		for(RatingTop rt : tops)
-			for(int i=0; i < rt.places.length; i++) {
-				if(rt.places[i] == null) break; //end of spend places
-				rt.places[i] = null;
-			}
-		
-		new Thread(new Runnable() {
-		    public void run() {
-		     	try {
-		     		int error_count = 0, player_count = 0;
-		     		for(OfflinePlayer p : getServer().getOfflinePlayers())
-					{
-						player_count++;
-						Player pl;
-						if(p.isOnline())
-							pl = p.getPlayer();
-						else
-							try {
-								pl = OfflinePlayerLoader.loadPlayer(p.getUniqueId());
-							} catch(Exception e) {
-								e.printStackTrace();
-								error_count++;
-								continue;
-							}
-						
-						for(RatingTop rt : tops) {
-							if(rt instanceof VanillaRatingTop) {
-								if(((VanillaRatingTop) rt).criteria == Statistic.MOB_KILLS) {
-									
-								}
-								rt.try_add( pl.getStatistic( ((VanillaRatingTop) rt).criteria ), pl.getName() );
-							}
-						}
-					}
-					System.out.println("[ThirdEye] Tops: " + player_count + " players, " + error_count + " errors");
-				} catch (Exception e) {
-					System.out.println("[ThirdEye] Tops: 1 big error");
-					e.printStackTrace();
-				}
-		    }
-		}).start();
 	}
 	
 	public double normalize(double x) {

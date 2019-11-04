@@ -1,5 +1,9 @@
 package com.te;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * The MIT License
  * Copyright (c) 2015 Techcable
@@ -27,11 +31,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * Loads the data of offline players
@@ -112,7 +121,7 @@ public class OfflinePlayerLoader extends Reflection {
     private static Object newPlayerInteractManager() {
         Object worldServer = getWorldServer();
         Class<?> playerInteractClass = getNmsClass("PlayerInteractManager");
-        Class<?> worldClass = getNmsClass("World");
+        Class<?> worldClass = getNmsClass("WorldServer");
         Constructor c = makeConstructor(playerInteractClass, worldClass);
         return callConstructor(c, worldServer);
     }
@@ -138,5 +147,37 @@ public class OfflinePlayerLoader extends Reflection {
     private static Entity getBukkitEntity(Object o) {
         Method getBukkitEntity = makeMethod(o.getClass(), "getBukkitEntity");
         return callMethod(getBukkitEntity, o);
+    }
+
+	
+	public long getOfflinePlayerStatistic(OfflinePlayer player, Statistic statistic) {
+        //Default server world always be the first of the list
+        File worldFolder = new File(Bukkit.getServer().getWorlds().get(0).getWorldFolder(), "stats");
+        File playerStatistics = new File(worldFolder, player.getUniqueId().toString() + ".json");
+        if(playerStatistics.exists()){
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = (JSONObject) parser.parse(new FileReader(playerStatistics));
+            } catch (IOException | ParseException e) {
+                Bukkit.getLogger().log(Level.WARNING, "Falha ao ler o arquivo de estatisticas do jogador " + player.getName(), e);
+            }
+            StringBuilder statisticNmsName = new StringBuilder("stat.");
+            for(char character : statistic.name().toCharArray()) {
+                if(statisticNmsName.charAt(statisticNmsName.length() - 1) == '_') {
+                    statisticNmsName.setCharAt(statisticNmsName.length() - 1, Character.toUpperCase(character));
+                }else {
+                    statisticNmsName.append(Character.toLowerCase(character));
+                }
+            }
+            if(jsonObject.containsKey(statisticNmsName.toString())) {
+                return (long) jsonObject.get(statisticNmsName.toString());
+            }else {
+                //This statistic has not yet been saved to file, so it is 0
+                return 0;
+            }
+        }
+        //Any statistic can be -1?
+        return -1;
     }
 }

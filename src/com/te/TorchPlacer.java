@@ -30,9 +30,10 @@ public class TorchPlacer implements Listener {
 	public static final String MSG_EMPTY = ChatColor.RED + "You have no torches.";
 	public static final String MSG_START = ChatColor.GREEN + "Torch placing is started.";
 	public static final String MSG_END   = ChatColor.GREEN + "Torch placing is ended.";
-	public static final String MSG_LAST = ChatColor.RED + "Out of torches.";
-	public static final String MSG_HAND = ChatColor.RED + "Take torches in hand.";
+	public static final String MSG_OUT_OF= ChatColor.RED + "Out of torches.";
+	public static final String MSG_HAND  = ChatColor.RED + "Take torches in hand.";
 
+	private static final Integer COOLDOWN_TICKS = 2;
 	public static final String KEY_COOLDOWN = "cd_torchplacer";
 	mainListener plugin;
 	
@@ -86,7 +87,7 @@ public class TorchPlacer implements Listener {
 		if (p.hasMetadata(KEY_COOLDOWN))
 		{
 			for (MetadataValue meta : p.getMetadata(KEY_COOLDOWN))
-				if (meta.asInt() == p.getTicksLived())
+				if (meta.asInt() + COOLDOWN_TICKS > p.getTicksLived())
 					return true;
 		}
 		return false;
@@ -127,7 +128,7 @@ public class TorchPlacer implements Listener {
 			
 			if (slot < 0)
 			{
-				p.sendMessage(MSG_LAST);
+				p.sendMessage(MSG_OUT_OF);
 				removePlayer(p);
 				return;
 			}
@@ -153,7 +154,7 @@ public class TorchPlacer implements Listener {
 			
 			if (slot < 0)
 			{
-				p.sendMessage(MSG_LAST);
+				p.sendMessage(MSG_OUT_OF);
 				removePlayer(p);
 			}
 			else
@@ -171,18 +172,27 @@ public class TorchPlacer implements Listener {
 		
 		Material m = b.getType();
 		// NOT: cactus, leaves, farmland, enchanting table, end portal frame, grass path, beds, stonecutter, doors, lecterns, daylight sensors, composter, brewing stations, cauldrons
+		if (isNegativeException(m)) {
+			return false;
+		}
 		// BUT: glowstone, anvil, end rod, scaffolding
+		if (isPositiveException(m)) {
+			return true;
+		}
+		
 		if (b.isPassable() // sign, trapdoors, doors...
 				|| !m.isSolid() // ladder?
 				|| m == Material.CHEST || m == Material.TRAPPED_CHEST)
 			return false;
 		
+		// bottom slabs
 		BlockData data = b.getBlockData();
 		if (data instanceof Slab) {
 			if (((Slab) data).getType() == Type.BOTTOM) {
 				return false;
 			}
 		}
+		//bottom stairs and etc
 		if (data instanceof Bisected) {
 			if (((Bisected) data).getHalf() == Half.BOTTOM) {
 				return false;
@@ -190,5 +200,99 @@ public class TorchPlacer implements Listener {
 		}
 		
 		return true;
+	}
+	
+	boolean isNegativeException(Material m) {
+		if (isBed(m) || isDoor(m) || isLeaves(m)) {
+			return true;
+		}
+		
+		switch (m) {
+		case CACTUS:
+		case FARMLAND:
+		case ENCHANTING_TABLE:
+		case END_PORTAL_FRAME:
+		case GRASS_PATH:
+		case STONECUTTER:
+		case LECTERN:
+		case DAYLIGHT_DETECTOR:
+		case COMPOSTER:
+		case BREWING_STAND:
+		case CAULDRON:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	boolean isPositiveException(Material m) {
+		switch (m) {
+		case GLOWSTONE:
+		case ANVIL:
+		case CHIPPED_ANVIL:
+		case DAMAGED_ANVIL:
+		case END_ROD:
+		case SCAFFOLDING:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	
+	public boolean isBed(Material m) {
+		switch (m) {
+		case BLACK_BED:
+		case BLUE_BED:
+		case BROWN_BED:
+		case CYAN_BED:
+		case GRAY_BED:
+		case GREEN_BED:
+		case LIGHT_BLUE_BED:
+		case LIGHT_GRAY_BED:
+		case LIME_BED:
+		case MAGENTA_BED:
+		case ORANGE_BED:
+		case PINK_BED:
+		case PURPLE_BED:
+		case RED_BED:
+		case WHITE_BED:
+		case YELLOW_BED:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	public boolean isLeaves(Material m) {
+		switch (m) {
+		case ACACIA_LEAVES:
+		case BIRCH_LEAVES:
+		case DARK_OAK_LEAVES:
+		case JUNGLE_LEAVES:
+		case OAK_LEAVES:
+		case SPRUCE_LEAVES:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	public boolean isWoodenDoor(Material m) {
+		switch (m) {
+		case ACACIA_DOOR:
+		case BIRCH_DOOR:
+		case DARK_OAK_DOOR:
+		case JUNGLE_DOOR:
+		case OAK_DOOR:
+		case SPRUCE_DOOR:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	public boolean isDoor(Material m) {
+		return m == Material.IRON_DOOR || isWoodenDoor(m);
 	}
 }
