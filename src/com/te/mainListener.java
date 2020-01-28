@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_14_R1.EntityArmorStand;
-import net.minecraft.server.v1_14_R1.EntityLiving;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_14_R1.PacketPlayOutPosition;
-import net.minecraft.server.v1_14_R1.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
+import net.minecraft.server.v1_15_R1.EntityArmorStand;
+import net.minecraft.server.v1_15_R1.EntityLiving;
+import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_15_R1.PacketPlayOutPosition;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntityLiving;
+import net.minecraft.server.v1_15_R1.PlayerConnection;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,9 +29,9 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -101,12 +101,13 @@ public class mainListener extends JavaPlugin implements Listener
 				
 				// For /look
 				try {
-					for( World w : getServer().getWorlds() )
-						for( Entity en : w.getEntitiesByClass(ArmorStand.class) )
-							if(en.getCustomName().equals("fakestand"))
+					for (World w : getServer().getWorlds())
+						for (Entity en : w.getEntitiesByClass(ArmorStand.class))
+							if (en.getCustomName() != null && en.getCustomName().equals("fakestand"))
 								en.remove();
-					for(Camera c : looking_players) {
-						if(c.p.isOnline()) {
+					for (int i = looking_players.size() - 1; i >= 0; i--) {
+						Camera c = looking_players.get(i);
+						if (c.p.isOnline()) {
 							/*Entity fakestand = c.p.getWorld().spawn(c.l, ArmorStand.class);
 							fakestand.setGravity(false);
 							fakestand.setInvulnerable(true);
@@ -133,13 +134,13 @@ public class mainListener extends JavaPlugin implements Listener
 							((EntityPlayer)((CraftPlayer)c.p).getHandle()).playerConnection.sendPacket(camera);
 							fakeentity.remove();*/
 							
-							 
 						} else {
-							looking_players.remove(c);
+							looking_players.remove(i);
 						}
 					}
 				} catch(Exception ex) {
-					if(getServer().getWorlds().get(0).getTime()%2000 == 0)
+					//ex.printStackTrace();
+					if (getServer().getWorlds().get(0).getTime() == 0)
 						System.out.println("ThirdEye: look error");
 				}
 			}

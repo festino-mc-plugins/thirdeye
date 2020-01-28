@@ -32,6 +32,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.base.Preconditions;
 
+import net.minecraft.server.v1_15_R1.NBTTagDouble;
+import net.minecraft.server.v1_15_R1.NBTTagFloat;
+
 public class Reflection extends JavaPlugin {
 
     public static Class<?> getNmsClass(String name) {
@@ -194,4 +197,30 @@ public class Reflection extends JavaPlugin {
         return true;
     }
 
+    public static NBTTagDouble createDouble(double d) {
+    	try {
+        	Class<?> c = getNmsClass("NBTTagDouble");
+        	Constructor<?> constructor = c.getDeclaredConstructor(double.class);
+        	constructor.setAccessible(true);
+
+        	Object o = constructor.newInstance(d);
+        	return (NBTTagDouble) o;
+    	} catch (Exception e) {
+    		return null;
+    	}
+    }
+
+    public static NBTTagFloat createFloat(double d) {
+    	try {
+    		
+        	Class<?> c = getNmsClass("NBTTagFloat");
+        	Constructor<?> constructor = c.getDeclaredConstructor(double.class);
+        	constructor.setAccessible(true);
+
+        	Object o = constructor.newInstance(d);
+        	return (NBTTagFloat) o;
+    	} catch (Exception e) {
+    		return null;
+    	}
+    }
 }

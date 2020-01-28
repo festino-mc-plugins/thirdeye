@@ -29,24 +29,24 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.AttributeMapBase;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.AttributeMapServer;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.GenericAttributes;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.InventoryEnderChest;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.NBTCompressedStreamTools;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.NBTTagCompound;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.NBTTagDouble;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.NBTTagFloat;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.NBTTagList;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.PlayerAbilities;
-/*Import must be updated to match each new version*/import net.minecraft.server.v1_14_R1.PlayerInventory;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.AttributeMapBase;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.AttributeMapServer;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.GenericAttributes;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.InventoryEnderChest;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.NBTCompressedStreamTools;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.NBTTagCompound;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.NBTTagDouble;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.NBTTagFloat;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.NBTTagList;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.PlayerAbilities;
+/*Import must be updated to match each new version*/import net.minecraft.server.v1_15_R1.PlayerInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-/*Import must be updated to match each new version*/import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventory;
-/*Import must be updated to match each new version*/import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventoryPlayer;
+/*Import must be updated to match each new version*/import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftInventory;
+/*Import must be updated to match each new version*/import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
@@ -319,13 +319,13 @@ public class ImprovedOfflinePlayer {
     this.compound.setLong("WorldUUIDLeast", uuid.getLeastSignificantBits());
     this.compound.setInt("Dimension", w.getEnvironment().ordinal());
     NBTTagList position = new NBTTagList();
-    position.add(new NBTTagDouble(location.getX()));
-    position.add(new NBTTagDouble(location.getY()));
-    position.add(new NBTTagDouble(location.getZ()));
+    position.add(Reflection.createDouble(location.getX()));
+    position.add(Reflection.createDouble(location.getY()));
+    position.add(Reflection.createDouble(location.getZ()));
     this.compound.set("Pos", position);
     NBTTagList rotation = new NBTTagList();
-    rotation.add(new NBTTagFloat(location.getYaw()));
-    rotation.add(new NBTTagFloat(location.getPitch()));
+    rotation.add(Reflection.createFloat(location.getYaw()));
+    rotation.add(Reflection.createFloat(location.getPitch()));
     this.compound.set("Rotation", rotation);
     if(this.autosave) savePlayerData();
   }
@@ -435,9 +435,9 @@ public class ImprovedOfflinePlayer {
   }
   public void setVelocity(Vector vector) {
     NBTTagList motion = new NBTTagList();
-    motion.add(new NBTTagDouble(vector.getX()));
-    motion.add(new NBTTagDouble(vector.getY()));
-    motion.add(new NBTTagDouble(vector.getZ()));
+    motion.add(Reflection.createDouble(vector.getX()));
+    motion.add(Reflection.createDouble(vector.getY()));
+    motion.add(Reflection.createDouble(vector.getZ()));
     this.compound.set("Motion", motion);
     if(this.autosave) savePlayerData();
   }
