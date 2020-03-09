@@ -11,7 +11,6 @@ import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Slab.Type;
-import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,9 +34,9 @@ public class TorchPlacer implements Listener {
 
 	private static final Integer COOLDOWN_TICKS = 2;
 	public static final String KEY_COOLDOWN = "cd_torchplacer";
-	mainListener plugin;
+	Main plugin;
 	
-	public TorchPlacer(mainListener plugin) {
+	public TorchPlacer(Main plugin) {
 		this.plugin = plugin;
 	}
 	

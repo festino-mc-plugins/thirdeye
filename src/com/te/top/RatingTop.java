@@ -3,8 +3,9 @@ package com.te.top;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class RatingTop {
+public abstract class RatingTop {
 	int TOP_SIZE = 50;
 	RatingPlace[] places = new RatingPlace[TOP_SIZE];
 
@@ -44,8 +45,10 @@ public class RatingTop {
 		ends_with5_0 = e3;
 	}
 	
+	public abstract void getStatistic(Player p);
+	
 	//need optimization <= sorted array
-	public void try_add(int value, String nick) {
+	protected void try_add(int value, String nick) {
 		/*if(this instanceof VanillaRatingTop && ((VanillaRatingTop)this).criteria == Statistic.PLAY_ONE_MINUTE)
 			value = (int) (Math.round((double)value/720)/100);  //div ticks by 20*60*60*/
 			//value = (int) (Math.round((double)value*10/6)/100); //div minutes by 60
@@ -76,7 +79,9 @@ public class RatingTop {
 		
 		sender.sendMessage(ChatColor.BOLD + header);
 		
-		boolean small_values = false, is_top_time = this instanceof VanillaRatingTop && ((VanillaRatingTop)this).criteria == Statistic.PLAY_ONE_MINUTE;
+		boolean small_values = false;
+		boolean is_top_time = this instanceof VanillaRatingTop && ((VanillaRatingTop)this).criteria == Statistic.PLAY_ONE_MINUTE;
+		boolean is_distance = this instanceof VanillaRatingTop && ((VanillaRatingTop)this).main_activator.equals("distance"); // TODO DistanceRatingTop, @Overwrite output
 		if (is_top_time && places[0].place_value < 20*60*60*10) // 1st place - less than 10 hours
 			small_values = true;
 		
@@ -100,7 +105,10 @@ public class RatingTop {
 				String value = Integer.toString(int_val);
 				if (is_top_time) {
 					value = Integer.toString( (int) (Math.round(((double)int_val)/720)/100) );  //div ticks by 20*60*60
+				} else if (is_distance) {
+					value = Double.toString( ((double)int_val)/100 );
 				}
+				
 				String end;
 				if (small_values) {
 					if (is_top_time) {
