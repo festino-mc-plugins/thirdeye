@@ -1,4 +1,4 @@
-package com.te.top;
+package com.te.utils;
 
 public class UtilsTop {
 	public static <T> boolean contains(T[] arr, T elem) {

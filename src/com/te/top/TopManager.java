@@ -14,8 +14,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.te.OfflinePlayerLoader;
 import com.te.top.TopTabCompleter.Option;
+import com.te.utils.OfflinePlayerLoader;
+import com.te.utils.UtilsTop;
 
 import net.md_5.bungee.api.ChatColor;
 

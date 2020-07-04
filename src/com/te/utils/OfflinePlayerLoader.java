@@ -1,4 +1,4 @@
-package com.te;
+package com.te.utils;
 
 import java.io.File;
 import java.io.FileReader;

@@ -1,4 +1,4 @@
-package com.te;
+package com.te.utils;
 
 /**
  * The MIT License
@@ -32,8 +32,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.base.Preconditions;
 
-import net.minecraft.server.v1_15_R1.NBTTagDouble;
-import net.minecraft.server.v1_15_R1.NBTTagFloat;
+import net.minecraft.server.v1_16_R1.NBTTagDouble;
+import net.minecraft.server.v1_16_R1.NBTTagFloat;
 
 public class Reflection extends JavaPlugin {
 

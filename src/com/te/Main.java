@@ -1,12 +1,14 @@
 package com.te;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_16_R1.EntityPlayer;
+
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -20,12 +22,27 @@ import com.te.top.TopManager;
 
 public class Main extends JavaPlugin {
 	
+	private static String PLUGIN_NAME = "ThirdEye";
+	private static Logger STATICLOGGER;
 	int ping_update_ticks = 20, ping_ticks = ping_update_ticks;
 	int sleep_update_ticks = 10, sleep_ticks = sleep_update_ticks;
 	private Scoreboard sb;
 	
 	TorchPlacer torches = new TorchPlacer(this);
 	TopManager tops;
+
+	public Main() {
+		PLUGIN_NAME = getName();
+		STATICLOGGER = getLogger();
+	}
+	
+	public static String getStaticName() {
+		return PLUGIN_NAME;
+	}
+	
+	public static Logger getStaticLogger() {
+		return STATICLOGGER;
+	}
 	
 	public void onEnable()
 	{
@@ -46,12 +63,15 @@ public class Main extends JavaPlugin {
 		getCommand("deldat").setExecutor(cmd_manager);
 		getCommand("fix").setExecutor(cmd_manager);
 		getCommand("look").setExecutor(cmd_manager);
+		DateCommand dateCommand = new DateCommand();
+		getCommand("date").setExecutor(dateCommand);
 		
 		loadConfig();
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this,
 	            new Runnable() {
-			public void run() {
+			public void run()
+			{
 				tops.tick();
 				
 				ping_ticks--;
@@ -115,11 +135,6 @@ public class Main extends JavaPlugin {
 	            0L,1L);
 	}
 	
-	public void onDisable()
-	{
-		
-	}
-	
 	
 	public void changePing()
 	{
@@ -139,7 +154,7 @@ public class Main extends JavaPlugin {
 			Biome biome = p.getLocation().getBlock().getBiome();
 			if (p.isSleeping()) {
 				p.setPlayerListName(ChatColor.AQUA+"[S]"+ChatColor.WHITE+p.getName());
-			} else if (biome == Biome.NETHER
+			} else if (biome == Biome.NETHER_WASTES || biome == Biome.SOUL_SAND_VALLEY || biome == Biome.CRIMSON_FOREST || biome == Biome.WARPED_FOREST || biome == Biome.BASALT_DELTAS
 					|| biome == Biome.THE_END || biome == Biome.SMALL_END_ISLANDS || biome == Biome.END_BARRENS || biome == Biome.END_HIGHLANDS || biome == Biome.END_MIDLANDS) {
 				p.setPlayerListName(ChatColor.RED+"[S]"+ChatColor.WHITE+p.getName());
 			} else {

@@ -5,6 +5,8 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import com.te.utils.UtilsTop;
+
 public class VanillaRatingTop extends RatingTop {
 	Statistic criteria;
 	Object subcriteria;

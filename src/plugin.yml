@@ -11,4 +11,5 @@ commands:
          look:
          deldat:
          torch:
+         date:
 api-version: 1.15
