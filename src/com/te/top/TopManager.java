@@ -16,14 +16,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.te.top.TopTabCompleter.Option;
 import com.te.utils.OfflinePlayerLoader;
-import com.te.utils.UtilsTop;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class TopManager implements CommandExecutor {
-	public static final Statistic MATERIAL_STATISTIC_LIST[] = {
-			Statistic.MINE_BLOCK, Statistic.BREAK_ITEM, Statistic.CRAFT_ITEM,
-			Statistic.USE_ITEM, Statistic.PICKUP, Statistic.DROP };
 	
 	int topSize = 5;
 	int top_update_maxticks = 216000, top_update_ticks = 0; //20*60*60*3 (3 hours)
@@ -109,17 +105,17 @@ public class TopManager implements CommandExecutor {
 				" место занимает игрок ", " место занимают игроки ", 
 				", у которого ", ", у которых ", 
 				" убийство.", " убийства.", " убийств."));
-		for (EntityType et : getMobStatisticList()) {
+		for (EntityType et : TopUtils.getMobStatisticList()) {
 			tops.add(new VanillaRatingTop(Statistic.KILL_ENTITY, "killmob", et.toString().toLowerCase(),
 					"Топ по убийствам " + et.toString().toLowerCase().replace('_', ' ') + ":", 
 					" место занимает игрок ", " место занимают игроки ", 
 					", у которого ", ", у которых ", 
 					" убийство.", " убийства.", " убийств."));
 		}
-		for (Statistic stat : MATERIAL_STATISTIC_LIST) {
+		for (Statistic stat : TopUtils.MATERIAL_STATISTIC_LIST) {
 			if (stat == Statistic.PICKUP || stat == Statistic.DROP)
 				continue; // skip boring statistics
-			for (Material m : getMaterialStatisticList(stat)) {
+			for (Material m : TopUtils.getMaterialStatisticList(stat)) {
 				String top_activator = stat.toString();
 				String top_name = "ERROR_NAME(" + stat + ")";
 				String[] end = {"END1", "END2_4", "END5_10"};
@@ -308,61 +304,5 @@ public class TopManager implements CommandExecutor {
 		}
 
 		return options;
-	}
-	
-	private List<EntityType> getMobStatisticList() {
-		List<EntityType> list = new ArrayList<>();
-		Player p = null;
-		try {
-			OfflinePlayer[] off_players = plugin.getServer().getOfflinePlayers();
-			if (off_players.length > 0) { // on first server launch can't load specific mob kills
-				p = OfflinePlayerLoader.loadPlayer(off_players[0]);
-			}
-		} catch (Exception e) {
-			System.out.print("[ThirdEye] Can't load player statistic");
-		}
-			
-		if (p != null) {
-			for (EntityType et : EntityType.values()) {
-				try {
-					p.getStatistic(Statistic.KILL_ENTITY, et);
-				} catch (Exception e) {
-					System.out.print("[ThirdEye] Can't get Statistic.KILL_ENTITY - " + et);
-					continue;
-				}
-				list.add(et);
-			}
-		}
-		return list;
-	}
-	
-	private List<Material> getMaterialStatisticList(Statistic stat)
-	{
-		List<Material> list = new ArrayList<>();
-		if (!UtilsTop.contains(MATERIAL_STATISTIC_LIST, stat))
-			return list;
-					
-		Player p = null;
-		try {
-			OfflinePlayer[] off_players = plugin.getServer().getOfflinePlayers();
-			if (off_players.length > 0) { // on first server launch can't load specific mob kills
-				p = OfflinePlayerLoader.loadPlayer(off_players[0]);
-			}
-		} catch (Exception e) {
-			System.out.print("[ThirdEye] Can't load player statistic");
-		}
-			
-		if (p != null) {
-			for (Material m : Material.values()) {
-				try {
-					p.getStatistic(stat, m);
-				} catch (Exception e) {
-					System.out.print("[ThirdEye] Can't get Statistic." + stat + " - " + m);
-					continue;
-				}
-				list.add(m);
-			}
-		}
-		return list;
 	}
 }

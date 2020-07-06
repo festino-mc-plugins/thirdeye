@@ -55,14 +55,15 @@ public class Main extends JavaPlugin {
 		
 		sb = Bukkit.getScoreboardManager().getMainScoreboard();
 		
-		CommandManager cmd_manager = new CommandManager(this, torches, tops);
-		getCommand("te").setExecutor(cmd_manager);
-		getCommand("torch").setExecutor(cmd_manager);
-		getCommand("ping").setExecutor(cmd_manager);
-		getCommand("hat").setExecutor(cmd_manager);
-		getCommand("deldat").setExecutor(cmd_manager);
-		getCommand("fix").setExecutor(cmd_manager);
-		getCommand("look").setExecutor(cmd_manager);
+		CommandManager cmdManager = new CommandManager(this, torches, tops);
+		getCommand("te").setExecutor(cmdManager);
+		getCommand("torch").setExecutor(cmdManager);
+		getCommand("ping").setExecutor(cmdManager);
+		getCommand("hat").setExecutor(cmdManager);
+		getCommand("deldat").setExecutor(cmdManager);
+		getCommand("look").setExecutor(cmdManager);
+		FixCommand fixCommand = new FixCommand(getServer());
+		getCommand("fix").setExecutor(fixCommand);
 		DateCommand dateCommand = new DateCommand();
 		getCommand("date").setExecutor(dateCommand);
 		
@@ -92,8 +93,8 @@ public class Main extends JavaPlugin {
 						for (Entity en : w.getEntitiesByClass(ArmorStand.class))
 							if (en.getCustomName() != null && en.getCustomName().equals("fakestand"))
 								en.remove();
-					for (int i = cmd_manager.looking_players.size() - 1; i >= 0; i--) {
-						Camera c = cmd_manager.looking_players.get(i);
+					for (int i = cmdManager.looking_players.size() - 1; i >= 0; i--) {
+						Camera c = cmdManager.looking_players.get(i);
 						if (c.p.isOnline()) {
 							/*Entity fakestand = c.p.getWorld().spawn(c.l, ArmorStand.class);
 							fakestand.setGravity(false);
@@ -122,7 +123,7 @@ public class Main extends JavaPlugin {
 							fakeentity.remove();*/
 							
 						} else {
-							cmd_manager.looking_players.remove(i);
+							cmdManager.looking_players.remove(i);
 						}
 					}
 				} catch(Exception ex) {
