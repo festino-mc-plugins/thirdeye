@@ -49,9 +49,10 @@ public class Main extends JavaPlugin {
 		PluginManager pm = getServer().getPluginManager();
     	pm.registerEvents(torches, this);
 
-		tops = new TopManager(this);
-		getCommand("top").setExecutor(tops);
-		getCommand("top").setTabCompleter(tops.getCompleter());
+		tops = new TopManager();
+		getCommand("top").setExecutor(tops.getExecutor());
+		getCommand("top").setTabCompleter(tops.getTabCompleter());
+		pm.registerEvents(tops.getUpdater(), this);
 		
 		sb = Bukkit.getScoreboardManager().getMainScoreboard();
 		
@@ -74,6 +75,7 @@ public class Main extends JavaPlugin {
 			public void run()
 			{
 				tops.tick();
+				tops.getUpdater().tick();
 				
 				ping_ticks--;
 				if(ping_ticks <= 0) {

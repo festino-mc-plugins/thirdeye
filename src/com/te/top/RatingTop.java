@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public abstract class RatingTop {
-	int TOP_SIZE = 50;
+	int TOP_SIZE = 20;
 	RatingPlace[] places = new RatingPlace[TOP_SIZE];
 
 	String main_activator;
@@ -46,12 +46,11 @@ public abstract class RatingTop {
 	}
 	
 	public abstract void getStatistic(Player p);
+	/** Optimized for top compilation from scratch */
+	public abstract void getUniqueStatistic(Player p);
 	
 	//need optimization <= sorted array
 	protected void try_add(int value, String nick) {
-		/*if(this instanceof VanillaRatingTop && ((VanillaRatingTop)this).criteria == Statistic.PLAY_ONE_MINUTE)
-			value = (int) (Math.round((double)value/720)/100);  //div ticks by 20*60*60*/
-			//value = (int) (Math.round((double)value*10/6)/100); //div minutes by 60
 		if (this instanceof VanillaRatingTop && value == 0)
 			return;
 		for (int i = 0; i < TOP_SIZE; i++) {
@@ -62,7 +61,7 @@ public abstract class RatingTop {
 			}
 			else if (rp.place_value < value) {
 				for (int j = TOP_SIZE - 1; j > i; j--) {
-					places[j] = places[j-1];
+					places[j] = places[j - 1];
 				}
 				places[i] = new RatingPlace(value, nick);
 				break;
@@ -71,6 +70,100 @@ public abstract class RatingTop {
 				rp.nicknames.add(nick);
 				break;
 			}
+		}
+	}
+	
+	protected void try_update(int value, String nick) {
+		if (this instanceof VanillaRatingTop && value == 0)
+			return;
+		Integer oldPlace = null;
+		for (int i = 0; i < TOP_SIZE; i++) {
+			RatingPlace rp = places[i];
+			if (rp == null) {
+				break;
+			}
+			if (rp.nicknames.contains(nick)) {
+				oldPlace = i;
+				break;
+			}
+		}
+		if (oldPlace != null) {
+			// value not changed
+			if (places[oldPlace].place_value == value) {
+				return;
+			}
+			// the same place
+			if (places[oldPlace].nicknames.size() == 1 && oldPlace != 0 && places[oldPlace - 1].place_value > value
+					&& (oldPlace == TOP_SIZE - 1 || places[oldPlace + 1] == null || places[oldPlace + 1].place_value < value) ) {
+				places[oldPlace].place_value = value;
+				return;
+			}
+		}
+		
+		Integer newPlace = null;
+		for (int i = 0; i < TOP_SIZE; i++) {
+			RatingPlace rp = places[i];
+			if (rp == null || rp.place_value <= value) {
+				newPlace = i;
+				break;
+			}
+		}
+		
+		if (oldPlace == null && newPlace == null) {
+			return;
+		}
+		if (oldPlace == null && newPlace != null) {
+			if (places[newPlace] != null && places[newPlace].place_value == value) {
+				places[newPlace].nicknames.add(nick);
+				if (places[newPlace] != null) {
+					for (int j = TOP_SIZE - 1; j > newPlace + 1; j--) {
+						places[j] = places[j - 1];
+					}
+				}
+				places[newPlace] = new RatingPlace(value, nick);
+			} else {
+				if (places[newPlace] != null) {
+					for (int j = TOP_SIZE - 1; j > newPlace; j--) {
+						places[j] = places[j - 1];
+					}
+				}
+				places[newPlace] = new RatingPlace(value, nick);
+			}
+			return;
+		}
+		if (oldPlace != null && newPlace == null || oldPlace < newPlace) {
+			// NOT VANILLA TOP
+			return;
+		}
+		
+		// oldPlace >= newPlace
+		if (places[newPlace].place_value == value) {
+			if (places[oldPlace].nicknames.size() == 1) {
+				for (int j = oldPlace; j < TOP_SIZE - 1; j++) {
+					places[j] = places[j + 1];
+				}
+				places[TOP_SIZE - 1] = null; // PLACE LOSS !!! TODO ???
+			} else {
+				places[oldPlace].nicknames.remove(nick);
+			}
+			places[newPlace].nicknames.add(nick);
+		} else {
+			if (places[oldPlace].nicknames.size() == 1) {
+				// move between
+				if (places[newPlace] != null) {
+					for (int j = oldPlace; j > newPlace; j--) {
+						places[j] = places[j - 1];
+					}
+				}
+			} else {
+				places[oldPlace].nicknames.remove(nick);
+				if (places[newPlace] != null) {
+					for (int j = TOP_SIZE - 1; j > newPlace; j--) {
+						places[j] = places[j - 1];
+					}
+				}
+			}
+			places[newPlace] = new RatingPlace(value, nick);
 		}
 	}
 	

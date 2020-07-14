@@ -100,7 +100,7 @@ public class CommandManager implements CommandExecutor {
 			{
 				plugin.reloadConfig();
 				plugin.loadConfig();
-				tops.update_tops();
+				tops.updateTops();
 				sender.sendMessage("Config and tops were reloaded.");
 				return true;
 			}
