@@ -18,87 +18,70 @@ public class TopManager {
 	TopUpdater updater = new TopUpdater(this);
 	
 	public TopManager() {
+		RatingTop top = new VanillaRatingTop(Statistic.PLAY_ONE_MINUTE, "time");
+		top.setDecorators("Топ по времени:", " место занимает игрок ", ", у которого ", " ч на сервере.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.PLAYER_KILLS, "kill");
+		top.setDecorators("Топ по убийствам игроков:", " место занимает игрок ", ", убивший ", " раз.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.DEATHS, "death");
+		top.setDecorators("Топ по смертям:", " место занимает игрок ", ", умерший ", " раз.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.JUMP, "jump");
+		top.setDecorators("Топ прыгателей:", " место занимает игрок ", ", прыгнувший ", " раз.");
+		tops.add(top);
+		
+		top = new VanillaRatingTop(Statistic.WALK_ONE_CM, "distance", "walk");
+		top.setDecorators("Топ по ходьбе:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.PIG_ONE_CM, "distance", "pig");
+		top.setDecorators("Топ по свиновой езде:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.SPRINT_ONE_CM, "distance", "sprint");
+		top.setDecorators("Топ по бегу:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.CROUCH_ONE_CM, "distance", "crouch");
+		top.setDecorators("Топ по ходьбе крадучись:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.FALL_ONE_CM, "distance", "fall");
+		top.setDecorators("Топ по падению:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.HORSE_ONE_CM, "distance", "horse");
+		top.setDecorators("Топ по верховой езде:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.WALK_ON_WATER_ONE_CM, "distance", "onwater");
+		top.setDecorators("Топ по ходьбе в воде:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.WALK_UNDER_WATER_ONE_CM, "distance", "underwater");
+		top.setDecorators("Топ по ходьбе под водой:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.SWIM_ONE_CM, "distance", "swim");
+		top.setDecorators("Топ пловцов:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.FLY_ONE_CM, "distance", "fly");
+		top.setDecorators("Топ по креативщикам(вас ждёт бан):", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.AVIATE_ONE_CM, "distance", "elytra");
+		top.setDecorators("Топ по летучкам:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.BOAT_ONE_CM, "distance", "boat");
+		top.setDecorators("Топ по лодочникам:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.CLIMB_ONE_CM, "distance", "climb");
+		top.setDecorators("Топ по лестницелазам:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
+		top = new VanillaRatingTop(Statistic.MINECART_ONE_CM, "distance", "minecart");
+		top.setDecorators("Топ по шахтёрам:", " место занимает игрок ", ", у которого ", " м.");
+		tops.add(top);
 
-		tops.add(new VanillaRatingTop(Statistic.PLAY_ONE_MINUTE, "time", "Топ по времени:",
-				" место занимает игрок ", " место занимают игроки ",
-				", у которого ", ", у которых ",
-				" час на сервере.", " часа на сервере.", " часов на сервере."));
-		tops.add(new VanillaRatingTop(Statistic.PLAYER_KILLS, "kill", "Топ по убийствам игроков:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" убийство.", " убийства.", " убийств."));
-		tops.add(new VanillaRatingTop(Statistic.DEATHS, "death", "Топ по смертям:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" смерть.", " смерти.", " смертей."));
-		
-		tops.add(new VanillaRatingTop(Statistic.WALK_ONE_CM, "distance", "walk", "Топ по ходьбе:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.PIG_ONE_CM, "distance", "pig", "Топ по свиновой езде:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.SPRINT_ONE_CM, "distance", "sprint", "Топ по бегу:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.CROUCH_ONE_CM, "distance", "crouch", "Топ по ходьбе крадучись:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.FALL_ONE_CM, "distance", "fall", "Топ по падению:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.HORSE_ONE_CM, "distance", "horse", "Топ по верховой езде:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.WALK_ON_WATER_ONE_CM, "distance", "onwater", "Топ по ходьбе в воде:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.WALK_UNDER_WATER_ONE_CM, "distance", "underwater", "Топ по ходьбе под водой:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.SWIM_ONE_CM, "distance", "swim", "Топ пловцов:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.FLY_ONE_CM, "distance", "fly", "Топ по креативщикам(вас ждёт бан):", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.AVIATE_ONE_CM, "distance", "elytra", "Топ по летучкам:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.BOAT_ONE_CM, "distance", "boat", "Топ по лодочникам:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.CLIMB_ONE_CM, "distance", "climb", "Топ по лестницелазам:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		tops.add(new VanillaRatingTop(Statistic.MINECART_ONE_CM, "distance", "minecart", "Топ по шахтёрам:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" м.", " м.", " м."));
-		
-		tops.add(new VanillaRatingTop(Statistic.MOB_KILLS, "killmob", "Топ по убийствам мобов:", 
-				" место занимает игрок ", " место занимают игроки ", 
-				", у которого ", ", у которых ", 
-				" убийство.", " убийства.", " убийств."));
+		top = new VanillaRatingTop(Statistic.MOB_KILLS, "killmob");
+		top.setDecorators("Топ по убийствам мобов:", " место занимает игрок ", ", у которого ", " убийств.");
+		tops.add(top);
 		for (EntityType et : TopUtils.getMobStatisticList()) {
-			tops.add(new VanillaRatingTop(Statistic.KILL_ENTITY, "killmob", et.toString().toLowerCase(),
-					"Топ по убийствам " + et.toString().toLowerCase().replace('_', ' ') + ":", 
-					" место занимает игрок ", " место занимают игроки ", 
-					", у которого ", ", у которых ", 
-					" убийство.", " убийства.", " убийств."));
+			top = new VanillaRatingTop(Statistic.KILL_ENTITY, "killmob", et.toString().toLowerCase());
+			top.setDecorators("Топ по убийствам " + et.toString().toLowerCase().replace('_', ' ') + ":",
+					" место занимает игрок ", ", у которого ", " убийств.");
+			tops.add(top);
 		}
 		for (Statistic stat : TopUtils.MATERIAL_STATISTIC_LIST) {
 			if (stat == Statistic.PICKUP || stat == Statistic.DROP)
@@ -110,7 +93,7 @@ public class TopManager {
 				if (stat == Statistic.BREAK_ITEM) {
 					top_activator = "ibreak";
 					top_name = "сломанным";
-					end[0] = "предмет"; end[1] = "предмета"; end[2] = "предметов"; // TODO remove russian feature
+					end[0] = "предмет"; end[1] = "предмета"; end[2] = "предметов"; // TODO rework russian feature with formatted output
 				} else if (stat == Statistic.MINE_BLOCK) {
 					top_activator = "imine";
 					top_name = "выкопанным";
@@ -126,11 +109,10 @@ public class TopManager {
 				}
 				
 				String material_name = m.toString().toLowerCase().replace('_', ' ');
-				tops.add(new VanillaRatingTop(stat, top_activator, m.toString().toLowerCase(),
-						"Топ по " + top_name + " " + material_name + ":", 
-						" место занимает игрок ", " место занимают игроки ", 
-						", у которого ", ", у которых ", 
-						" " + end[0] + ".", " " + end[1] + ".", " " + end[2] + "."));
+				top = new VanillaRatingTop(stat, top_activator, m.toString().toLowerCase());
+				top.setDecorators("Топ по " + top_name + " " + material_name + ":",
+						" место занимает игрок ", ", у которого ", " " + end[0] + ".");
+				tops.add(top);
 			}
 		}
 
@@ -170,8 +152,8 @@ public class TopManager {
 		return completer;
 	}
 
-	/** <b>Warning:</b> Cause memory leak*/
+	/** <b>Warning:</b> May be slow*/
 	public void updateTops() {
-		updater.update_tops();
+		updater.reloadTops_UsingStatFiles();
 	}
 }

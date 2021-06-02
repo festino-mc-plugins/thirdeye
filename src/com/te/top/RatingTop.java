@@ -3,7 +3,6 @@ package com.te.top;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public abstract class RatingTop {
 	int TOP_SIZE = 20;
@@ -11,46 +10,32 @@ public abstract class RatingTop {
 
 	String main_activator;
 	String add_activator = null;
-	private String header;
-	private String starts_with1; //... place takes player ...
-	private String starts_with2p; //... place take playerS ...
-	private String middle1; //who 
-	private String middle2p;
-	private String ends_with1; //hours on the server
-	private String ends_with2_4;
-	private String ends_with5_0;
-	private final String last_nichnames_separator = " è ";
+	private String header = "Top of ";
+	private String starts_with = " place takes player "; // TODO format strings
+	private String middle = " who has ";
+	private String ends_with = " on the server.";
 	
-	public RatingTop(String a, String h, String s1, String s2, String m1, String m2, String e1, String e2, String e3) {
+	public RatingTop(String a) {
 		main_activator = a;
-		header = h;
-		starts_with1 = s1;
-		starts_with2p = s2;
-		middle1 = m1;
-		middle2p = m2;
-		ends_with1 = e1;
-		ends_with2_4 = e2;
-		ends_with5_0 = e3;
 	}
-	public RatingTop(String a, String a2, String h, String s1, String s2, String m1, String m2, String e1, String e2, String e3) {
+	public RatingTop(String a, String a2) {
 		main_activator = a;
 		add_activator = a2;
-		header = h;
-		starts_with1 = s1;
-		starts_with2p = s2;
-		middle1 = m1;
-		middle2p = m2;
-		ends_with1 = e1;
-		ends_with2_4 = e2;
-		ends_with5_0 = e3;
 	}
 	
-	public abstract void getStatistic(Player p);
+	public void setDecorators(String h, String s1, String m1, String e1) {
+		header = h;
+		starts_with = s1;
+		middle = m1;
+		ends_with = e1;
+	}
+	
+	public abstract void getStatistic(StatPlayer p);
 	/** Optimized for top compilation from scratch */
-	public abstract void getUniqueStatistic(Player p);
+	public abstract void getUniqueStatistic(StatPlayer p);
 	
 	//need optimization <= sorted array
-	protected void try_add(int value, String nick) {
+	protected void try_add(long value, String nick) {
 		if (this instanceof VanillaRatingTop && value == 0)
 			return;
 		for (int i = 0; i < TOP_SIZE; i++) {
@@ -73,7 +58,7 @@ public abstract class RatingTop {
 		}
 	}
 	
-	protected void try_update(int value, String nick) {
+	protected void try_update(long value, String nick) {
 		if (this instanceof VanillaRatingTop && value == 0)
 			return;
 		Integer oldPlace = null;
@@ -189,40 +174,26 @@ public abstract class RatingTop {
 					}
 					names += name;
 				}
-				if (length > 1) {
-					names += last_nichnames_separator;
-				}
 				names += places[i].nicknames.get(length-1);
 				
-				int int_val = places[i].place_value;
-				String value = Integer.toString(int_val);
+				long int_val = places[i].place_value;
+				String value = Long.toString(int_val);
 				if (is_top_time) {
 					value = Integer.toString( (int) (Math.round(((double)int_val)/720)/100) );  //div ticks by 20*60*60
 				} else if (is_distance) {
 					value = Double.toString( ((double)int_val)/100 );
 				}
 				
-				String end;
 				if (small_values) {
 					if (is_top_time) {
 						value = Double.toString( (double) Math.round(((double)int_val)/720)/100 );  //div ticks by 20*60*60
 					}
-					end = ends_with5_0;
-				}
-				else {
-					if ( (int_val + 9) % 10 > 3 || (int_val > 10 && int_val < 20) ) {
-						end = ends_with5_0;
-					} else if (int_val % 10 > 1) {
-						end = ends_with2_4;
-					} else {
-						end = ends_with1;
-					}
 				}
 				//[1] [place takes player] [FEST_Channel] [who had played] [10] [hours on server]
 				if (places[i].nicknames.size() == 1) {
-					sender.sendMessage((i+1) + starts_with1 + names + middle1 + value + end);
+					sender.sendMessage((i+1) + starts_with + names + middle + value + ends_with);
 				} else {
-					sender.sendMessage((i+1) + starts_with2p + names + middle2p + value + end);
+					sender.sendMessage((i+1) + starts_with + names + middle + value + ends_with);
 				}
 			} else {
 				break;

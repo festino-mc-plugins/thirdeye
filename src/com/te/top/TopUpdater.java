@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.te.Logger;
 import com.te.utils.OfflinePlayerLoader;
 
 public class TopUpdater implements Listener {
@@ -51,12 +52,13 @@ public class TopUpdater implements Listener {
 			next = players[0];
 		}
 		
+		OnlineStatPlayer statPlayer = new OnlineStatPlayer(next);
 		for (RatingTop rt : manager.getTops()) {
-			rt.getStatistic(next);
+			rt.getStatistic(statPlayer);
 		}
 		
 		lastPlayer = next.getName();
-     	//manager.getTabCompleter().updateOptions();
+     	manager.getTabCompleter().updateOptions();
 	}
 
 	@EventHandler
@@ -64,11 +66,11 @@ public class TopUpdater implements Listener {
 		if (isUpdating) {
 			return;
 		}
-		Player player = event.getPlayer();
+		OnlineStatPlayer player = new OnlineStatPlayer(event.getPlayer());
 		for (RatingTop rt : manager.getTops()) {
 			rt.getStatistic(player);
 		}
-     	//manager.getTabCompleter().updateOptions();
+     	manager.getTabCompleter().updateOptions();
 	}
 	
 	/** Could cause lags */
@@ -86,17 +88,52 @@ public class TopUpdater implements Listener {
 			}
 		}
 	}*/
+	
+	public void reloadTops_UsingStatFiles() {
+		isUpdating = true;
+		clearTops();
+		
+		new Thread(new Runnable() {
+		    public void run() {
+		     	try {
+		     		int error_count = 0, player_count = 0;
+		     		
+		     		for (OfflinePlayer p : Bukkit.getServer().getOfflinePlayers())
+					{
+						player_count++;
+						StatPlayer player;
+						if (p.isOnline()) {
+							player = new OnlineStatPlayer(p.getPlayer());
+						} else {
+							player = new JSONStatPlayer(p.getName(), p.getUniqueId());
+							if (!player.isValid()) {
+								error_count++;
+								//Logger.severe("Player error: no file (name: " + p.getName() + ", UUID: " + p.getUniqueId() + ")");
+								continue;
+							}
+						}
+						
+						for (RatingTop rt : manager.getTops()) {
+							rt.getUniqueStatistic(player);
+						}
+						
+					}
+					Logger.severe("Tops: " + player_count + " players, " + error_count + " errors");
+				} catch (Exception e) {
+					Logger.severe("Tops: 1 big error");
+					e.printStackTrace();
+				}
+		     	
+		     	manager.getTabCompleter().updateOptions();
+		     	isUpdating = false;
+		    }
+		}).start();
+	}
 
 	/** <b>Warning:</b> Cause memory leak*/
-	public void update_tops() {
+	public void reloadTops_OfflinePlayerLoading() {
 		isUpdating = true;
-		for (RatingTop rt : manager.getTops()) {
-			for (int i = 0; i < rt.places.length; i++) {
-				if (rt.places[i] == null) // end of spend places
-					break;
-				rt.places[i] = null;
-			}
-		}
+		clearTops();
 		
 		new Thread(new Runnable() {
 		    public void run() {
@@ -119,7 +156,7 @@ public class TopUpdater implements Listener {
 						}
 						
 						for (RatingTop rt : manager.getTops()) {
-							rt.getUniqueStatistic(player);
+							rt.getUniqueStatistic(new OnlineStatPlayer(player));
 						}
 						
 					}
@@ -134,5 +171,16 @@ public class TopUpdater implements Listener {
 		     	//System.out.print("FINISHED " + Thread.currentThread() + " (" + Thread.activeCount() + ")");
 		    }
 		}).start();
+	}
+	
+	private void clearTops()
+	{
+		for (RatingTop rt : manager.getTops()) {
+			for (int i = 0; i < rt.places.length; i++) {
+				if (rt.places[i] == null) // end of spend places
+					break;
+				rt.places[i] = null;
+			}
+		}
 	}
 }
