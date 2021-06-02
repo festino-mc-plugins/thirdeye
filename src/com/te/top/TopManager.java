@@ -19,7 +19,7 @@ public class TopManager {
 	
 	public TopManager() {
 		RatingTop top = new VanillaRatingTop(Statistic.PLAY_ONE_MINUTE, "time");
-		top.setDecorators("Топ по времени:", " место занимает игрок ", ", у которого ", " ч на сервере.");
+		top.setDecorators("Топ по времени:", " место занимает игрок ", ", у которого ", " часов на сервере.");
 		tops.add(top);
 		top = new VanillaRatingTop(Statistic.PLAYER_KILLS, "kill");
 		top.setDecorators("Топ по убийствам игроков:", " место занимает игрок ", ", убивший ", " раз.");
