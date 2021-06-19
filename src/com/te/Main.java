@@ -1,14 +1,12 @@
 package com.te;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_16_R3.EntityPlayer;
 
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -167,7 +165,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	public static int getPing(Player p) {
-		return ((EntityPlayer)((CraftPlayer)p).getHandle()).ping;
+		return p.getPing();
 	}
 	
 	public void loadConfig()

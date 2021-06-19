@@ -32,8 +32,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.base.Preconditions;
 
-import net.minecraft.server.v1_16_R3.NBTTagDouble;
-import net.minecraft.server.v1_16_R3.NBTTagFloat;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagFloat;
+
 
 public class Reflection extends JavaPlugin {
 

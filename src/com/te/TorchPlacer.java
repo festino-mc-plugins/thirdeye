@@ -211,7 +211,7 @@ public class TorchPlacer implements Listener {
 		case FARMLAND:
 		case ENCHANTING_TABLE:
 		case END_PORTAL_FRAME:
-		case GRASS_PATH:
+		case DIRT_PATH:
 		case STONECUTTER:
 		case LECTERN:
 		case DAYLIGHT_DETECTOR:
