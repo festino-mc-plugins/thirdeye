@@ -8,10 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import com.te.Logger;
-import com.te.utils.OfflinePlayerLoader;
 
 public class TopUtils {
 	
@@ -28,14 +26,16 @@ public class TopUtils {
 	
 	public static List<EntityType> getMobStatisticList() {
 		List<EntityType> list = new ArrayList<>();
-		Player p = null;
+		OfflinePlayer p = null;
+		//Player p = null;
 		try {
 			OfflinePlayer[] off_players = Bukkit.getServer().getOfflinePlayers();
 			if (off_players.length > 0) { // on first server launch can't load specific mob kills
-				p = OfflinePlayerLoader.loadPlayer(off_players[0]);
+				//p = OfflinePlayerLoader.loadPlayer(off_players[0]);
+				p = off_players[0];
 			}
 		} catch (Exception e) {
-			Logger.warning("[ThirdEye] Can't load player statistic");
+			Logger.warning("[ThirdEye] Couldn't load player statistic for \"TopUtils.getMobStatisticList()\"");
 		}
 			
 		if (p != null) {
@@ -58,14 +58,16 @@ public class TopUtils {
 		if (!TopUtils.contains(MATERIAL_STATISTIC_LIST, stat))
 			return list;
 					
-		Player p = null;
+		//Player p = null;
+		OfflinePlayer p = null;
 		try {
 			OfflinePlayer[] off_players = Bukkit.getServer().getOfflinePlayers();
 			if (off_players.length > 0) { // on first server launch can't load specific mob kills
-				p = OfflinePlayerLoader.loadPlayer(off_players[0]);
+				//p = OfflinePlayerLoader.loadPlayer(off_players[0]);
+				p = off_players[0];
 			}
 		} catch (Exception e) {
-			Logger.warning("[ThirdEye] Can't load player statistic");
+			Logger.warning("[ThirdEye] Couldn't load player statistic for \"TopUtils.getMaterialStatisticList(" + stat + ")\"");
 		}
 			
 		if (p != null) {
