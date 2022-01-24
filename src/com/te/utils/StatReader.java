@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class StatReader {
-	private static JSONParser parser = new JSONParser();
-	
 	private static File getStatsDir()
 	{
 		File mainWorldDir = Bukkit.getWorlds().get(0).getWorldFolder();
@@ -34,24 +33,24 @@ public class StatReader {
 		return uuids.toArray(new UUID[] {});
 	}
 	
-	public static JSONObject read(UUID playerUUID)
+	public static JsonObject read(UUID playerUUID)
 	{
 		File statsDir = getStatsDir();
 		String formattedUUID = playerUUID.toString(); // 8-4-4-4-12
 		File playerFile = new File(statsDir, formattedUUID + ".json");
 		try {
-			JSONObject parsed = (JSONObject) parser.parse(new FileReader(playerFile));
-			return (JSONObject) parsed.get("stats");
+			JsonObject parsed = (JsonObject) JsonParser.parseReader(new FileReader(playerFile));
+			return (JsonObject) parsed.get("stats");
 		} catch (Exception e) {
 			return null;
 		}
 	}
 	
-	public static long readLong(JSONObject stats, String section, String item)
+	public static long readLong(JsonObject stats, String section, String item)
 	{
 		try {
-			JSONObject jsonSection = (JSONObject) stats.get(section);
-			return (Long) jsonSection.get(item);
+			JsonObject jsonSection = (JsonObject) stats.get(section);
+			return jsonSection.get(item).getAsLong();
 		} catch (Exception e) {
 			//throw new Exception("Couldn't read \"stats/" + section + "/" + "item\", error: " + e.getMessage());
 			return 0;

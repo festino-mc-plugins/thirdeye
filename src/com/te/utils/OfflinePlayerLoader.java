@@ -38,9 +38,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 
 /**
  * Loads the data of offline players
@@ -154,12 +155,11 @@ public class OfflinePlayerLoader extends Reflection {
         //Default server world always be the first of the list
         File worldFolder = new File(Bukkit.getServer().getWorlds().get(0).getWorldFolder(), "stats");
         File playerStatistics = new File(worldFolder, player.getUniqueId().toString() + ".json");
-        if(playerStatistics.exists()){
-            JSONParser parser = new JSONParser();
-            JSONObject jsonObject = null;
+        if (playerStatistics.exists()){
+            JsonObject jsonObject = null;
             try {
-                jsonObject = (JSONObject) parser.parse(new FileReader(playerStatistics));
-            } catch (IOException | ParseException e) {
+                jsonObject = (JsonObject) JsonParser.parseReader(new FileReader(playerStatistics));
+            } catch (IOException | JsonParseException e) {
                 Bukkit.getLogger().log(Level.WARNING, "Falha ao ler o arquivo de estatisticas do jogador " + player.getName(), e);
             }
             StringBuilder statisticNmsName = new StringBuilder("stat.");
@@ -170,8 +170,8 @@ public class OfflinePlayerLoader extends Reflection {
                     statisticNmsName.append(Character.toLowerCase(character));
                 }
             }
-            if(jsonObject.containsKey(statisticNmsName.toString())) {
-                return (long) jsonObject.get(statisticNmsName.toString());
+            if(jsonObject.has(statisticNmsName.toString())) {
+                return jsonObject.get(statisticNmsName.toString()).getAsLong();
             }else {
                 //This statistic has not yet been saved to file, so it is 0
                 return 0;

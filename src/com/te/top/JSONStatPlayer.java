@@ -3,13 +3,13 @@ package com.te.top;
 import java.util.UUID;
 
 import org.bukkit.Statistic;
-import org.json.simple.JSONObject;
 
+import com.google.gson.JsonObject;
 import com.te.utils.StatReader;
 
 public class JSONStatPlayer implements StatPlayer {
 	private final String name;
-	private final JSONObject player;
+	private final JsonObject player;
 	
 	public JSONStatPlayer(String name, UUID uuid) {
 		this.name = name;

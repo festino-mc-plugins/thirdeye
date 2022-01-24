@@ -17,8 +17,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.json.simple.JSONObject;
 
+import com.google.gson.JsonObject;
 import com.te.top.JSONStatPlayer;
 import com.te.top.TopManager;
 import com.te.utils.OfflinePlayerLoader;
@@ -148,9 +148,9 @@ public class CommandManager implements CommandExecutor {
 			}
 			if (args[0].equalsIgnoreCase("temp")) {
 				Player p = (Player) sender;
-				JSONObject stat = StatReader.read(p.getUniqueId());
+				JsonObject stat = StatReader.read(p.getUniqueId());
 				sender.sendMessage("pig cm: " + StatReader.readLong(stat, "minecraft:custom", "minecraft:pig_one_cm"));
-				sender.sendMessage("leaves: " +StatReader.readLong(stat, "minecraft:custom", "minecraft:leave_game"));
+				sender.sendMessage("leaves: " + StatReader.readLong(stat, "minecraft:custom", "minecraft:leave_game"));
 				JSONStatPlayer pl = new JSONStatPlayer(p.getName(), p.getUniqueId());
 				sender.sendMessage("pig cm: " + pl.getStat(Statistic.PIG_ONE_CM, null));
 			}
