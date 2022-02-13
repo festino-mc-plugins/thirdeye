@@ -174,7 +174,9 @@ public abstract class RatingTop {
 					}
 					names += name;
 				}
-				names += places[i].nicknames.get(length-1);
+				if (length > 1)
+					names += " è ";
+				names += places[i].nicknames.get(length - 1); // TODO format string
 				
 				long int_val = places[i].place_value;
 				String value = Long.toString(int_val);
