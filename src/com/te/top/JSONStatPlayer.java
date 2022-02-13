@@ -27,7 +27,10 @@ public class JSONStatPlayer implements StatPlayer {
 		if (subcriteria != null) {
 			item = "minecraft:" + subcriteria.toString().toLowerCase();
 		} else {
-			item = "minecraft:" + criteria.toString().toLowerCase();
+			if (criteria == Statistic.PLAY_ONE_MINUTE) // TODO make more elegant workaround
+				item = "minecraft:play_time";
+			else
+				item = "minecraft:" + criteria.toString().toLowerCase();
 		}
 		return StatReader.readLong(player, section, item);
 	}
