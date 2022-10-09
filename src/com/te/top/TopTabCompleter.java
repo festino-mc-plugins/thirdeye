@@ -3,7 +3,6 @@ package com.te.top;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -65,7 +64,8 @@ public class TopTabCompleter implements TabCompleter {
 		}
 		
 		public Option(String option, List<Option> suboptions) {
-			Validate.notNull(suboptions);
+			if (suboptions == null)
+				throw new NullPointerException();
 			this.option = option;
 			this.suboptions = suboptions;
 		}
