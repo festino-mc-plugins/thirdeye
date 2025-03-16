@@ -1,11 +1,12 @@
-package com.te.top;
+package festp.top;
 
 import java.util.UUID;
 
 import org.bukkit.Statistic;
 
 import com.google.gson.JsonObject;
-import com.te.utils.StatReader;
+
+import festp.utils.StatReader;
 
 public class JSONStatPlayer implements StatPlayer {
 	private final String name;

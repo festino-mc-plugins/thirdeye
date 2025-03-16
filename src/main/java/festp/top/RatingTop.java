@@ -1,4 +1,6 @@
-package com.te.top;
+package festp.top;
+
+import java.text.MessageFormat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
@@ -11,9 +13,7 @@ public abstract class RatingTop {
 	String main_activator;
 	String add_activator = null;
 	private String header = "Top of ";
-	private String starts_with = " place takes player "; // TODO format strings
-	private String middle = " who has ";
-	private String ends_with = " on the server.";
+	private String rowFormat = "{0} place takes player {1} who has {2} on the server.";
 	
 	public RatingTop(String a) {
 		main_activator = a;
@@ -23,11 +23,9 @@ public abstract class RatingTop {
 		add_activator = a2;
 	}
 	
-	public void setDecorators(String h, String s1, String m1, String e1) {
-		header = h;
-		starts_with = s1;
-		middle = m1;
-		ends_with = e1;
+	public void setDecorators(String header, String rowFormat) {
+		this.header = header;
+		this.rowFormat = rowFormat.replace("{place}", "{0}").replace("{player}", "{1}").replace("{score}", "{2}");
 	}
 	
 	public abstract void getStatistic(StatPlayer p);
@@ -175,7 +173,7 @@ public abstract class RatingTop {
 					names += name;
 				}
 				if (length > 1)
-					names += " è ";
+					names += " ï¿½ ";
 				names += places[i].nicknames.get(length - 1); // TODO format string
 				
 				long int_val = places[i].place_value;
@@ -192,11 +190,7 @@ public abstract class RatingTop {
 					}
 				}
 				//[1] [place takes player] [FEST_Channel] [who had played] [10] [hours on server]
-				if (places[i].nicknames.size() == 1) {
-					sender.sendMessage((i+1) + starts_with + names + middle + value + ends_with);
-				} else {
-					sender.sendMessage((i+1) + starts_with + names + middle + value + ends_with);
-				}
+				sender.sendMessage(MessageFormat.format(rowFormat, i + 1, names, value));
 			} else {
 				break;
 			}

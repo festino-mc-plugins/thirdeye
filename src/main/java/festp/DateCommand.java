@@ -1,4 +1,4 @@
-package com.te;
+package festp;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -16,31 +16,31 @@ public class DateCommand implements CommandExecutor {
 	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command cmd, String lbl, String[] args) {
 		if (args.length == 0) {
-			sender.sendMessage(ChatColor.RED + "Введите ник игрока.");
+			sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
 			return false;
 		}
 		
 		String name = args[0];
 		OfflinePlayer p = Bukkit.getOfflinePlayer(name);
 		if (p == null) {
-			sender.sendMessage(ChatColor.RED + "NPE! Игрок \"" + name + "\" не найден.");
+			sender.sendMessage(ChatColor.RED + "NPE! пїЅпїЅпїЅпїЅпїЅ \"" + name + "\" пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
 			return false;
 		}
 		if (!p.hasPlayedBefore()) {
-			sender.sendMessage(ChatColor.RED + "Игрок \"" + name + "\" не играл.");
+			sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅ \"" + name + "\" пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.");
 			return false;
 		}
-		sender.sendMessage(ChatColor.GREEN + "Информация о " + p.getName() + ":");
+		sender.sendMessage(ChatColor.GREEN + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ " + p.getName() + ":");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		String firstDateStr = dateFormat.format(new Date(p.getFirstPlayed()));
 		String lastDateStr = dateFormat.format(new Date(p.getLastPlayed()));
-		sender.sendMessage(ChatColor.GREEN + "    Первый заход:     " + firstDateStr);
+		sender.sendMessage(ChatColor.GREEN + "    пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ:     " + firstDateStr);
 		if (p.equals(sender)) {
-			sender.sendMessage(ChatColor.GREEN + "    Последний заход: это ты, дурашка" );
+			sender.sendMessage(ChatColor.GREEN + "    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" );
 		} else if (p.isOnline()) {
-			sender.sendMessage(ChatColor.GREEN + "    Последний заход: этот игрок сейчас на сервере" );
+			sender.sendMessage(ChatColor.GREEN + "    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" );
 		} else {
-			sender.sendMessage(ChatColor.GREEN + "    Последний заход: " + lastDateStr);
+			sender.sendMessage(ChatColor.GREEN + "    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: " + lastDateStr);
 		}
 		return true;
 	}

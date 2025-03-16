@@ -1,4 +1,4 @@
-package com.te;
+package festp;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -16,7 +16,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import com.te.top.TopManager;
+import festp.top.TopManager;
 
 public class Main extends JavaPlugin {
 	

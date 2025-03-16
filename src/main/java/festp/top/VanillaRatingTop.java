@@ -1,4 +1,4 @@
-package com.te.top;
+package festp.top;
 
 import org.bukkit.Material;
 import org.bukkit.Statistic;

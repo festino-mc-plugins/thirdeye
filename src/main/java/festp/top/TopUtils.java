@@ -1,4 +1,4 @@
-package com.te.top;
+package festp.top;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 
-import com.te.Logger;
+import festp.Logger;
 
 public class TopUtils {
 	

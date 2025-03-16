@@ -1,4 +1,4 @@
-package com.te.top;
+package festp.top;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -26,7 +26,7 @@ public class TopCommand implements CommandExecutor {
 					rt.output_to_player(sender, manager.topSize);
 					return true;
 				}
-			sender.sendMessage("Топа с таким определителем не существует.");
+			sender.sendMessage("пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
 			printTops(sender);
 			return true;
 		}
@@ -40,7 +40,7 @@ public class TopCommand implements CommandExecutor {
 					}
 				}
 			}
-			sender.sendMessage("Топа с таким определителем не существует.");
+			sender.sendMessage("пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
 			printTops(sender);
 			return true;
 		}
@@ -48,7 +48,7 @@ public class TopCommand implements CommandExecutor {
 	}
 	
 	public void printTops(CommandSender sender) {
-		sender.sendMessage(ChatColor.GRAY+"Доступные топы:");
+		sender.sendMessage(ChatColor.GRAY+"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ:");
 		String list = "";
 		boolean first = true;
 		for (RatingTop rt : manager.getTops()) {
@@ -61,10 +61,10 @@ public class TopCommand implements CommandExecutor {
 				}
 				list += rt.main_activator;
 			} else {
-				if (list.indexOf(rt.main_activator + "(с подвариантами)") != index) {
+				if (list.indexOf(rt.main_activator + "(пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)") != index) {
 					index = index + rt.main_activator.length();
 					if (index != list.length() && list.charAt(index) != ',')
-					list = list.substring(0, index) + "(с подвариантами)" + list.substring(index);
+					list = list.substring(0, index) + "(пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)" + list.substring(index);
 				}
 			}
 		}

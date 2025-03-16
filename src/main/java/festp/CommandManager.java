@@ -1,4 +1,4 @@
-package com.te;
+package festp;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -19,11 +19,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.google.gson.JsonObject;
-import com.te.top.JSONStatPlayer;
-import com.te.top.TopManager;
-import com.te.utils.OfflinePlayerLoader;
-import com.te.utils.StatReader;
 
+import festp.top.JSONStatPlayer;
+import festp.top.TopManager;
+import festp.utils.OfflinePlayerLoader;
+import festp.utils.StatReader;
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandManager implements CommandExecutor {
@@ -143,7 +143,7 @@ public class CommandManager implements CommandExecutor {
 							+", Z:" + fo.format(l.getZ()) );
 					return true;
 				}
-				sender.sendMessage(ChatColor.RED + "Такой игрок не найден.");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
 				return false;
 			}
 			if (args[0].equalsIgnoreCase("temp")) {
@@ -184,7 +184,7 @@ public class CommandManager implements CommandExecutor {
 						return true;
 					}
 				}
-				sender.sendMessage(ChatColor.RED + "Такого игрока нет онлайн.");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
 			}
 			return false;
 		}
@@ -259,46 +259,46 @@ public class CommandManager implements CommandExecutor {
 				}
 			}
 		}
-		sender.sendMessage(ChatColor.RED + "Использование: /deldat <nickname> - удалить файл игрока(с киком)");
+		sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /deldat <nickname> - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ(пїЅ пїЅпїЅпїЅпїЅпїЅ)");
 		return false;
 	}
 	
 	public boolean onLookBranch(CommandSender sender, String[] args)
 	{
 		if(!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + "Буть играком!1!");
+			sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!1!");
 			return false;
 		}
 		Player p = (Player)sender;
 		if(args.length == 1 && args[0].equalsIgnoreCase("info")) {
 			for(Camera c : looking_players) 
 				if(c.p == p) {
-					sender.sendMessage(ChatColor.GRAY + "У вас установлена камера на "+c.l.getX()+", "+c.l.getY()+", "+c.l.getZ()+" ("+c.l.getYaw()+"; "+c.l.getPitch()+").");
+					sender.sendMessage(ChatColor.GRAY + "пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "+c.l.getX()+", "+c.l.getY()+", "+c.l.getZ()+" ("+c.l.getYaw()+"; "+c.l.getPitch()+").");
 					return true;
 				}
-			sender.sendMessage(ChatColor.GRAY + "У вас нет камер.");
+			sender.sendMessage(ChatColor.GRAY + "пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.");
 			return true;
 		}
 		if(args.length == 0)
 			for(Camera c : looking_players) 
 				if(c.p == p) {
 					looking_players.remove(c);
-					sender.sendMessage(ChatColor.GREEN + "Камера успешно отключена.");
+					sender.sendMessage(ChatColor.GREEN + "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
 					return true;
 				}
 		
 		if(args.length == 0) {
-			sender.sendMessage(ChatColor.RED + "Вы не можете выключить камеру, если у вас её нет.");
+			sender.sendMessage(ChatColor.RED + "пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ.");
 			return true;
 		}
 		else if(args.length != 3 && args.length != 4 && args.length != 5)
 		{
-			sender.sendMessage(ChatColor.GRAY + "Использование: /look - выключение");
-			sender.sendMessage(ChatColor.GRAY + "               /look info - информация о текущей камере");
-			sender.sendMessage(ChatColor.GRAY + "               /look <x> <y> <z> - вид сверху");
-			sender.sendMessage(ChatColor.GRAY + "               /look <x> <y> <z> <yaw> - вид сверху с поворотом");
-			sender.sendMessage(ChatColor.GRAY + "               /look <x> <y> <z> <yaw> <pitch> - вид под определённым углом");
-			sender.sendMessage(ChatColor.GRAY + "        (Все команды требуют находиться рядом с точкой по x и z)");
+			sender.sendMessage(ChatColor.GRAY + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /look - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			sender.sendMessage(ChatColor.GRAY + "               /look info - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
+			sender.sendMessage(ChatColor.GRAY + "               /look <x> <y> <z> - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
+			sender.sendMessage(ChatColor.GRAY + "               /look <x> <y> <z> <yaw> - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			sender.sendMessage(ChatColor.GRAY + "               /look <x> <y> <z> <yaw> <pitch> - пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
+			sender.sendMessage(ChatColor.GRAY + "        (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ x пїЅ z)");
 			return false;
 		}
 		
@@ -310,7 +310,7 @@ public class CommandManager implements CommandExecutor {
 			try {
 				x = Double.parseDouble(args[0]);
 			} catch(Exception ex) {
-				sender.sendMessage(ChatColor.RED + "Ошибка с аргументом x.");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ x.");
 				return false;
 			}
 		//Y
@@ -320,7 +320,7 @@ public class CommandManager implements CommandExecutor {
 			try {
 				y = Double.parseDouble(args[1]);
 			} catch(Exception ex) {
-				sender.sendMessage(ChatColor.RED + "Ошибка с аргументом y.");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ y.");
 				return false;
 			}
 		//Z
@@ -330,7 +330,7 @@ public class CommandManager implements CommandExecutor {
 			try {
 				z = Double.parseDouble(args[2]);
 			} catch(Exception ex) {
-				sender.sendMessage(ChatColor.RED + "Ошибка с аргументом z.");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ z.");
 				return false;
 			}
 		float yaw = 180, pitch = 90;
@@ -339,7 +339,7 @@ public class CommandManager implements CommandExecutor {
 			try {
 				yaw = Float.parseFloat(args[3]);
 			} catch(Exception ex) {
-				sender.sendMessage(ChatColor.RED + "Ошибка с аргументом yaw.");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ yaw.");
 				return false;
 			}
 		//pitch
@@ -347,7 +347,7 @@ public class CommandManager implements CommandExecutor {
 			try {
 				pitch = Float.parseFloat(args[4]);
 			} catch(Exception ex) {
-				sender.sendMessage(ChatColor.RED + "Ошибка с аргументом pitch.");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ pitch.");
 				return false;
 			}
 		Location l = new Location(p.getWorld(), x, y, z, yaw, pitch);
@@ -357,7 +357,7 @@ public class CommandManager implements CommandExecutor {
 				break;
 			}
 		looking_players.add(new Camera(p, l));
-		sender.sendMessage(ChatColor.GREEN + "Установлена камера на "+normalize(x)+", "+normalize(y)+", "+normalize(z)
+		sender.sendMessage(ChatColor.GREEN + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "+normalize(x)+", "+normalize(y)+", "+normalize(z)
 				+" ("+normalize(yaw)+"; "+normalize(pitch)+").");
 		return false;
 	}

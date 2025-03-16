@@ -1,4 +1,4 @@
-package com.te.top;
+package festp.top;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,8 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.te.Logger;
-import com.te.utils.OfflinePlayerLoader;
+import festp.Logger;
+import festp.utils.OfflinePlayerLoader;
 
 public class TopUpdater implements Listener {
 	private TopManager manager;

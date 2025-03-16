@@ -1,4 +1,4 @@
-package com.te;
+package festp;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,8 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.te.utils.OfflinePlayerLoader;
-
+import festp.utils.OfflinePlayerLoader;
 import net.md_5.bungee.api.ChatColor;
 
 public class FixCommand implements  CommandExecutor {
@@ -66,12 +65,13 @@ public class FixCommand implements  CommandExecutor {
 							return false;
 						}
 					}
-					p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(new_speed);
-					sender.sendMessage("Movement speed of "+args[1]+" have been set to "+new_speed);
+					//p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(new_speed);
+					//sender.sendMessage("Movement speed of "+args[1]+" have been set to "+new_speed);
+					sender.sendMessage(org.bukkit.ChatColor.RED + "Feature is not supported");
 					return true;
 				}
-				sender.sendMessage(ChatColor.RED + "Игрок не найден");
-				sender.sendMessage(ChatColor.RED + "Использование: /fix ms <nickname> [value] - скорость бега");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /fix ms <nickname> [value] - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
 				return true;
 			}
 					
@@ -83,7 +83,7 @@ public class FixCommand implements  CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("walls")) {
 				m = Material.ANDESITE_WALL;
 			} else {
-				sender.sendMessage(ChatColor.RED + "Использование: /fix <lava/water/walls> <r>");
+				sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /fix <lava/water/walls> <r>");
 				return false;
 			}
 			
@@ -130,9 +130,9 @@ public class FixCommand implements  CommandExecutor {
 			}
 			return true;
 		}
-		sender.sendMessage(ChatColor.RED + "Использование: /fix <lava/water> <r> - убирает лаву/воду");
-		sender.sendMessage(ChatColor.RED + "Использование: /fix <walls> <r> - чинит ограды на 1.16");
-		sender.sendMessage(ChatColor.RED + "Использование: /fix ms <nickname> [value] - скорость бега");
+		sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /fix <lava/water> <r> - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅ");
+		sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /fix <walls> <r> - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 1.16");
+		sender.sendMessage(ChatColor.RED + "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /fix ms <nickname> [value] - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
 		return false;
 	}
 }

@@ -1,4 +1,4 @@
-package com.te.utils;
+package festp.utils;
 
 /**
  * The MIT License
@@ -31,9 +31,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.base.Preconditions;
-
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagFloat;
 
 
 public class Reflection extends JavaPlugin {
@@ -170,7 +167,7 @@ public class Reflection extends JavaPlugin {
         Field only = null;
         for (Field field : toGetFrom.getDeclaredFields()) {
             if (!type.isAssignableFrom(field.getClass())) continue;
-            Preconditions.checkArgument(only == null, "More than one field of type %s on %s: %s and %s", type.getSimpleName(), toGetFrom.getSimpleName(), field.getName(), only.getName());
+            Preconditions.checkArgument(only == null, "More than one field of type %s on %s: %s and %s", type.getSimpleName(), toGetFrom.getSimpleName(), field.getName(), only == null ? "null" : only.getName());
             only = field;
         }
         return only;
@@ -181,7 +178,7 @@ public class Reflection extends JavaPlugin {
         for (Method method : toGetFrom.getDeclaredMethods()) {
             if (!returnType.isAssignableFrom(method.getReturnType())) continue;
             if (!isParamsMatchSpec(method.getParameterTypes(), paramSpec)) continue;
-            Preconditions.checkArgument(only == null, "More than one method matching spec on %s" + ((only.getName().equals(method.getName())) ? "" : ": " + only.getName() + " " + method.getName()), toGetFrom.getSimpleName());
+            Preconditions.checkArgument(only == null, "More than one method matching spec on %s" + ((only == null || only.getName().equals(method.getName())) ? "" : ": " + only.getName() + " " + method.getName()), toGetFrom.getSimpleName());
             only = method;
         }
         return only;
@@ -192,36 +189,9 @@ public class Reflection extends JavaPlugin {
         for (int i = 0; i < paramSpec.length; i++) {
             Class<?> spec = paramSpec[i];
             if (spec == null) continue;
-            Class parameter = parameters[i];
+            Class<?> parameter = parameters[i];
             if (!spec.isAssignableFrom(parameter)) return false;
         }
         return true;
-    }
-
-    public static NBTTagDouble createDouble(double d) {
-    	try {
-        	Class<?> c = getNmsClass("NBTTagDouble");
-        	Constructor<?> constructor = c.getDeclaredConstructor(double.class);
-        	constructor.setAccessible(true);
-
-        	Object o = constructor.newInstance(d);
-        	return (NBTTagDouble) o;
-    	} catch (Exception e) {
-    		return null;
-    	}
-    }
-
-    public static NBTTagFloat createFloat(double d) {
-    	try {
-    		
-        	Class<?> c = getNmsClass("NBTTagFloat");
-        	Constructor<?> constructor = c.getDeclaredConstructor(double.class);
-        	constructor.setAccessible(true);
-
-        	Object o = constructor.newInstance(d);
-        	return (NBTTagFloat) o;
-    	} catch (Exception e) {
-    		return null;
-    	}
     }
 }
